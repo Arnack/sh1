@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import InLayout from "./_layout/in";
-import Header from './_layout/header';
+
+import Navigation from './_layout/navbar'
 import "./globals.css";
 import Footer from "./_layout/footer";
 import { Providers } from "./providers";
@@ -21,17 +22,10 @@ export default function RootLayout({
       <body>
         <Providers>
           <InLayout>
-            <Header />
-            <Box
-              ml="250px"
-              pt="60px"
-              minHeight="calc(100vh - 58px)"
-              bg="gray.50"
-            >
-              <Container maxW="container.xl" py={8}>
+            <Navigation />
+              <Box minHeight="calc(100vh - 60px)">
                 {children}
-              </Container>
-            </Box>
+              </Box>
             <Footer />
           </InLayout>
         </Providers>

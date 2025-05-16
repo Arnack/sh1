@@ -33,6 +33,9 @@ import {
   Flex,
   Text,
   IconButton,
+  Radio,
+  RadioGroup,
+  Stack,
 } from "@chakra-ui/react"
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons"
 
@@ -50,8 +53,11 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [grouping, setGrouping] = React.useState<GroupingState>([])
+  const [groupBy, setGroupBy] = React.useState<string | null>(null)
   const [globalFilter, setGlobalFilter] = React.useState("")
+
+  // Convert single string groupBy to GroupingState array
+  const grouping: GroupingState = React.useMemo(() => groupBy ? [groupBy] : [], [groupBy])
 
   const table = useReactTable({
     data,
@@ -63,7 +69,15 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onGroupingChange: setGrouping,
+    enableGrouping: true,
+    onGroupingChange: (updater) => {
+      if (typeof updater === "function") {
+        const newGrouping = updater(grouping);
+        setGroupBy(newGrouping.length > 0 ? newGrouping[0] : null);
+      } else {
+        setGroupBy(updater.length > 0 ? updater[0] : null);
+      }
+    },
     getGroupedRowModel: getGroupedRowModel(),
     state: {
       sorting,
@@ -73,6 +87,11 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   })
+
+  // Handle group selection via radio buttons
+  const handleGroupChange = React.useCallback((value: string) => {
+    setGroupBy(value === "" ? null : value);
+  }, []);
 
   return (
     <Box gap={4} display="flex" flexDirection="column">
@@ -88,22 +107,16 @@ export function DataTable<TData, TValue>({
             Group By
           </MenuButton>
           <MenuList>
-            {groupingOptions.map((option) => (
-              <MenuItem key={option}>
-                <Checkbox
-                  isChecked={grouping.includes(option)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setGrouping([...grouping, option])
-                    } else {
-                      setGrouping(grouping.filter((g) => g !== option))
-                    }
-                  }}
-                >
-                  {option}
-                </Checkbox>
-              </MenuItem>
-            ))}
+            <RadioGroup value={groupBy || ""} onChange={handleGroupChange}>
+              <Stack pl={2} pr={2}>
+                <Radio value="">None</Radio>
+                {groupingOptions.map((option) => (
+                  <Radio key={option} value={option}>
+                    {option}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
           </MenuList>
         </Menu>
       </Flex>

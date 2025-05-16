@@ -1,0 +1,43 @@
+{
+  "layout": {
+    "navbar": {
+      "title": "ProjectMate",
+      "navLinks": {
+        "sign_in": "Sign in",
+        "logout": "Logout"
+      }
+    }
+  },
+  "loginPage": {
+    "title": "Login to ProjectMate",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "buttons": {
+      "sign_in": "Sign in",
+      "signing_in": "Signing in..."
+    },
+    "form": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "toast": {
+      "invalid_credentials": "Invalid email or password",
+      "error": {
+        "title": "Unable to login",
+        "description": "Please check your credentials"
+      }
+    },
+    "validation": {
+      "email_required": "Email is required",
+      "email_invalid": "Invalid email",
+      "password_required": "Password is required"
+    }
+  },
+  "footer": {
+    "nav": {
+      "home": "Home"
+    },
+    "rights": "All rights reserved"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "layout": {
+    "navbar": {
+      "title": "ProjectMate",
+      "navLinks": {
+        "sign_in": "Вход",
+        "logout": "Выход"
+      }
+    }
+  },
+  "loginPage": {
+    "title": "Вход в систему",
+    "email": "Email",
+    "password": "Пароль",
+    "login": "Вход",
+    "buttons": {
+      "sign_in": "Войти",
+      "signing_in": "Вход..."
+    },
+    "form": {
+      "email": "Email",
+      "password": "Пароль"
+    },
+    "toast": {
+      "invalid_credentials": "Неверный email или пароль",
+      "error": {
+        "title": "Не удалось войти",
+        "description": "Пожалуйста, проверьте свои учетные данные"
+      }
+    },
+    "validation": {
+      "email_required": "Email обязателен",
+      "email_invalid": "Неверный email",
+      "password_required": "Пароль обязателен"
+    }
+  }, 
+  "footer": {
+    "nav": {
+      "home": "Главная"
+    },
+    "rights": "Все права защищены"
+  }
+}

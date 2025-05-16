@@ -14,6 +14,8 @@ import {
   useReactTable,
   getGroupedRowModel,
   GroupingState,
+  getExpandedRowModel,
+  ExpandedState,
 } from "@tanstack/react-table"
 import {
   Table,
@@ -55,6 +57,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [groupBy, setGroupBy] = React.useState<string | null>(null)
   const [globalFilter, setGlobalFilter] = React.useState("")
+  const [expanded, setExpanded] = React.useState<ExpandedState>({})
 
   // Convert single string groupBy to GroupingState array
   const grouping: GroupingState = React.useMemo(() => groupBy ? [groupBy] : [], [groupBy])
@@ -70,6 +73,8 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     enableGrouping: true,
+    enableExpanding: true,
+    getExpandedRowModel: getExpandedRowModel(),
     onGroupingChange: (updater) => {
       if (typeof updater === "function") {
         const newGrouping = updater(grouping);
@@ -77,7 +82,10 @@ export function DataTable<TData, TValue>({
       } else {
         setGroupBy(updater.length > 0 ? updater[0] : null);
       }
+      // Reset expanded state when grouping changes
+      setExpanded({});
     },
+    onExpandedChange: setExpanded,
     getGroupedRowModel: getGroupedRowModel(),
     state: {
       sorting,
@@ -85,12 +93,15 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       grouping,
       globalFilter,
+      expanded,
     },
   })
 
   // Handle group selection via radio buttons
   const handleGroupChange = React.useCallback((value: string) => {
     setGroupBy(value === "" ? null : value);
+    // Reset expanded state when grouping changes
+    setExpanded({});
   }, []);
 
   return (
@@ -168,7 +179,7 @@ export function DataTable<TData, TValue>({
                           cell.column.columnDef.cell,
                           cell.getContext()
                         )
-                      ) : (
+                      ) : cell.getIsPlaceholder() ? null : (
                         flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
